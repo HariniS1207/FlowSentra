@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { DrainService } from '../core/services/drain.service';
@@ -14,7 +14,7 @@ import { DrainDashboard } from '../models/drain-dashboard.model';
 export class Dashboard implements OnInit {
 
   private readonly drainService = inject(DrainService);
-
+  private readonly cdr = inject(ChangeDetectorRef);
   dashboardData: DrainDashboard | null = null;
   loading = true;
   error = false;
@@ -27,23 +27,38 @@ export class Dashboard implements OnInit {
 
   loadDashboard(): void {
 
-    this.loading = true;
-    this.error = false;
+  this.loading = true;
+  this.error = false;
 
-    this.drainService
-      .getDashboardData(this.drainId)
-      .subscribe({
-        next: (data) => {
+  this.drainService
+    .getDashboardData(this.drainId)
+    .subscribe({
+      next: (data) => {
+
+          console.log('DASHBOARD RECEIVED DATA:', data);
+
           this.dashboardData = data;
+
+          console.log('DASHBOARD DATA SET:', this.dashboardData);
+
           this.loading = false;
+
+          this.cdr.detectChanges();
+
+          console.log('LOADING STATE:', this.loading);
         },
 
-        error: () => {
-          this.error = true;
-          this.loading = false;
-        }
-      });
-  }
+      error: (err) => {
+
+        console.error('DASHBOARD API ERROR:', err);
+
+        this.error = true;
+        this.loading = false;
+
+        console.log('LOADING STATE AFTER ERROR:', this.loading);
+      }
+    });
+}
 
   get conditionClass(): string {
     return this.dashboardData?.analysis.condition
