@@ -133,6 +133,7 @@ The intelligence layer converts sensor readings into a higher-level drainage ass
   "overflow_risk": 34,
   "sensor_confidence": 91,
   "maintenance_priority": "P2"
+  "recommended_action": "Inspect the drain for possible restricted flow."
 }
 
 ---
@@ -149,6 +150,7 @@ The intelligence layer converts sensor readings into a higher-level drainage ass
 | overflow_risk | integer | Estimated overflow risk |
 | sensor_confidence | integer | Confidence in sensor readings |
 | maintenance_priority | string | Recommended maintenance priority |
+| recommended_action | string | Recommended action based on the current drainage assessment
 
 ---
 
@@ -307,6 +309,7 @@ GET /api/v1/drains/D001/history
     "overflow_risk": 34,
     "sensor_confidence": 91,
     "maintenance_priority": "P2"
+    "recommended_action": "Inspect the drain for possible restricted flow."
   }
 }
 
@@ -380,6 +383,7 @@ The intelligence module produces:
 - overflow_risk
 - sensor_confidence
 - maintenance_priority
+- recommended_action
 
 ### Frontend Team
 
