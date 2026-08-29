@@ -1,0 +1,328 @@
+<div class="dashboard">
+
+  <!-- HEADER -->
+  <header class="topbar">
+
+    <div class="brand">
+      <div class="brand-mark">
+        FS
+      </div>
+
+      <div>
+        <h1>FlowSentra</h1>
+        <p>Intelligent Drainage Monitoring</p>
+      </div>
+    </div>
+
+    <div class="system-status">
+      <span class="status-dot"></span>
+      System Online
+    </div>
+
+  </header>
+
+
+  @if (loading) {
+
+    <main class="state-container">
+      <div class="loader"></div>
+      <p>Loading drain intelligence...</p>
+    </main>
+
+  }
+
+  @else if (error) {
+
+    <main class="state-container error-state">
+      <h2>Unable to retrieve drain data</h2>
+      <p>Please try again.</p>
+
+      <button (click)="loadDashboard()">
+        Try Again
+      </button>
+    </main>
+
+  }
+
+  @else if (dashboardData) {
+
+    <main class="main-content">
+
+      <!-- DRAIN OVERVIEW -->
+      <section class="overview-section">
+
+        <div>
+          <span class="section-label">
+            MONITORED DRAIN
+          </span>
+
+          <h2>
+            Drain {{ dashboardData.latest_reading.drain_id }}
+          </h2>
+
+          <p class="timestamp">
+            Last updated:
+            {{ dashboardData.latest_reading.timestamp | date:'medium' }}
+          </p>
+        </div>
+
+
+        <div
+          class="condition-badge"
+          [class]="conditionClass"
+        >
+          <span class="status-dot"></span>
+
+          {{ dashboardData.analysis.condition }}
+        </div>
+
+      </section>
+
+
+      <!-- MAIN INSIGHT -->
+      <section class="insight-card">
+
+        <div class="insight-content">
+
+          <span class="section-label">
+            PROBABLE CAUSE
+          </span>
+
+          <h3>
+            {{ dashboardData.analysis.probable_cause
+              .replace('_', ' ') }}
+          </h3>
+
+          <p>
+            Water level and flow conditions indicate
+            a possible restricted drainage path.
+          </p>
+
+        </div>
+
+
+        <div class="priority-block">
+
+          <span>MAINTENANCE PRIORITY</span>
+
+          <strong>
+            {{ dashboardData.analysis.maintenance_priority }}
+          </strong>
+
+        </div>
+
+      </section>
+
+
+      <!-- SENSOR CARDS -->
+      <section class="sensor-grid">
+
+        <article class="sensor-card">
+
+          <span class="sensor-label">
+            Water Level
+          </span>
+
+          <strong>
+            {{ dashboardData.latest_reading.water_level_cm }}
+          </strong>
+
+          <span class="unit">
+            cm
+          </span>
+
+        </article>
+
+
+        <article class="sensor-card">
+
+          <span class="sensor-label">
+            Flow Rate
+          </span>
+
+          <strong>
+            {{ dashboardData.latest_reading.flow_rate_lpm }}
+          </strong>
+
+          <span class="unit">
+            L/min
+          </span>
+
+        </article>
+
+
+        <article class="sensor-card">
+
+          <span class="sensor-label">
+            Rainfall
+          </span>
+
+          <strong>
+            {{ dashboardData.latest_reading.rainfall }}
+          </strong>
+
+          <span class="unit">
+            mm
+          </span>
+
+        </article>
+
+      </section>
+
+
+      <!-- INTELLIGENCE GRID -->
+      <section class="intelligence-grid">
+
+        <!-- HEALTH -->
+        <article class="metric-card health-card">
+
+          <div class="metric-header">
+            <span>Drain Health</span>
+            <span>0–100</span>
+          </div>
+
+          <div class="health-score">
+
+            <strong>
+              {{ dashboardData.analysis.health_score }}
+            </strong>
+
+            <span>/100</span>
+
+          </div>
+
+          <div class="progress-track">
+            <div
+              class="progress-fill health"
+              [style.width.%]="dashboardData.analysis.health_score"
+            ></div>
+          </div>
+
+        </article>
+
+
+        <!-- OVERFLOW -->
+        <article class="metric-card">
+
+          <div class="metric-header">
+            <span>Overflow Risk</span>
+
+            <strong>
+              {{ dashboardData.analysis.overflow_risk }}%
+            </strong>
+          </div>
+
+          <div class="progress-track large">
+            <div
+              class="progress-fill risk"
+              [style.width.%]="dashboardData.analysis.overflow_risk"
+            ></div>
+          </div>
+
+          <p class="metric-description">
+            Current estimated overflow probability
+          </p>
+
+        </article>
+
+
+        <!-- CONFIDENCE -->
+        <article class="metric-card">
+
+          <div class="metric-header">
+            <span>Sensor Confidence</span>
+
+            <strong>
+              {{ dashboardData.analysis.sensor_confidence }}%
+            </strong>
+          </div>
+
+          <div class="progress-track large">
+            <div
+              class="progress-fill confidence"
+              [style.width.%]="dashboardData.analysis.sensor_confidence"
+            ></div>
+          </div>
+
+          <p class="metric-description">
+            Reliability of current assessment
+          </p>
+
+        </article>
+
+      </section>
+
+
+      <!-- ANALYSIS -->
+      <section class="analysis-grid">
+
+        <article class="analysis-card">
+
+          <span class="section-label">
+            SEVERITY
+          </span>
+
+          <h3
+            [class]="severityClass"
+          >
+            {{ dashboardData.analysis.severity }}
+          </h3>
+
+        </article>
+
+
+        <article class="analysis-card">
+
+          <span class="section-label">
+            RECOMMENDED ACTION
+          </span>
+
+          <h3>
+            Inspect Drain
+          </h3>
+
+          <p>
+            {{ dashboardData.analysis.recommended_action }}
+          </p>
+
+        </article>
+
+      </section>
+
+
+      <!-- TREND PLACEHOLDER FOR ACTUAL CHART -->
+      <section class="trend-card">
+
+        <div class="trend-header">
+
+          <div>
+            <span class="section-label">
+              SENSOR TRENDS
+            </span>
+
+            <h3>
+              Drain Conditions Over Time
+            </h3>
+          </div>
+
+          <span class="trend-info">
+            Live monitoring
+          </span>
+
+        </div>
+
+        <div class="chart-placeholder">
+
+          <div class="chart-line"></div>
+
+          <span>Water Level</span>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  }
+
+</div>

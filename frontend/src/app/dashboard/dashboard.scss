@@ -1,0 +1,491 @@
+:host {
+  display: block;
+}
+
+.dashboard {
+  min-height: 100vh;
+  background: #f5f7fb;
+  color: #172033;
+}
+
+/* HEADER */
+
+.topbar {
+  height: 76px;
+  padding: 0 40px;
+  background: #ffffff;
+  border-bottom: 1px solid #e7eaf0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-mark {
+  width: 42px;
+  height: 42px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 12px;
+
+  background: #172033;
+  color: white;
+
+  font-weight: 800;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.brand p {
+  margin: 3px 0 0;
+  color: #7a8496;
+  font-size: 12px;
+}
+
+.system-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 13px;
+  color: #566174;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+  border-radius: 50%;
+  background: #20a464;
+}
+
+
+/* MAIN */
+
+.main-content {
+  max-width: 1400px;
+  margin: auto;
+  padding: 36px 40px 60px;
+}
+
+
+/* OVERVIEW */
+
+.overview-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 24px;
+}
+
+.section-label {
+  display: block;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+
+  color: #8992a3;
+}
+
+.overview-section h2 {
+  margin: 7px 0 3px;
+  font-size: 30px;
+}
+
+.timestamp {
+  margin: 0;
+  color: #8992a3;
+  font-size: 12px;
+}
+
+.condition-badge {
+  padding: 11px 18px;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  border-radius: 30px;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.condition-badge.normal {
+  background: #e8f7ef;
+  color: #177548;
+}
+
+.condition-badge.warning {
+  background: #fff5df;
+  color: #a26700;
+}
+
+.condition-badge.critical {
+  background: #ffe8e8;
+  color: #b42318;
+}
+
+
+/* INSIGHT */
+
+.insight-card {
+  padding: 26px 28px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: #172033;
+  color: white;
+
+  border-radius: 18px;
+
+  margin-bottom: 20px;
+}
+
+.insight-content h3 {
+  margin: 8px 0;
+  font-size: 22px;
+}
+
+.insight-content p {
+  margin: 0;
+  color: #b8c0ce;
+  max-width: 650px;
+  line-height: 1.5;
+}
+
+.priority-block {
+  min-width: 150px;
+  text-align: right;
+}
+
+.priority-block span {
+  display: block;
+  color: #9fa9ba;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.priority-block strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 30px;
+}
+
+
+/* SENSOR CARDS */
+
+.sensor-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+
+  margin-bottom: 18px;
+}
+
+.sensor-card {
+  padding: 23px;
+
+  background: white;
+  border: 1px solid #e7eaf0;
+  border-radius: 16px;
+}
+
+.sensor-label {
+  display: block;
+  color: #697386;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.sensor-card strong {
+  font-size: 31px;
+}
+
+.unit {
+  margin-left: 6px;
+  color: #8992a3;
+  font-size: 13px;
+}
+
+
+/* INTELLIGENCE */
+
+.intelligence-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+
+  margin-bottom: 18px;
+}
+
+.metric-card {
+  padding: 22px;
+
+  background: white;
+  border: 1px solid #e7eaf0;
+  border-radius: 16px;
+}
+
+.metric-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: #697386;
+  font-size: 13px;
+}
+
+.metric-header strong {
+  color: #172033;
+  font-size: 20px;
+}
+
+.health-score {
+  margin: 15px 0;
+
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.health-score strong {
+  font-size: 42px;
+}
+
+.health-score span {
+  color: #8992a3;
+}
+
+.progress-track {
+  width: 100%;
+  height: 7px;
+
+  overflow: hidden;
+
+  background: #edf0f4;
+  border-radius: 20px;
+}
+
+.progress-track.large {
+  margin-top: 24px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: inherit;
+}
+
+.progress-fill.health {
+  background: #20a464;
+}
+
+.progress-fill.risk {
+  background: #e19a27;
+}
+
+.progress-fill.confidence {
+  background: #5877d9;
+}
+
+.metric-description {
+  margin: 12px 0 0;
+
+  color: #8992a3;
+  font-size: 11px;
+}
+
+
+/* ANALYSIS */
+
+.analysis-grid {
+  display: grid;
+  grid-template-columns: 0.7fr 1.3fr;
+  gap: 18px;
+
+  margin-bottom: 18px;
+}
+
+.analysis-card {
+  padding: 24px;
+
+  background: white;
+  border: 1px solid #e7eaf0;
+  border-radius: 16px;
+}
+
+.analysis-card h3 {
+  margin: 10px 0 0;
+  font-size: 22px;
+}
+
+.analysis-card p {
+  color: #697386;
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+.analysis-card h3.low {
+  color: #20a464;
+}
+
+.analysis-card h3.medium {
+  color: #c27b00;
+}
+
+.analysis-card h3.high,
+.analysis-card h3.critical {
+  color: #c93636;
+}
+
+
+/* TREND */
+
+.trend-card {
+  padding: 25px;
+
+  background: white;
+  border: 1px solid #e7eaf0;
+  border-radius: 16px;
+}
+
+.trend-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.trend-header h3 {
+  margin: 7px 0 0;
+}
+
+.trend-info {
+  font-size: 11px;
+  color: #8992a3;
+}
+
+.chart-placeholder {
+  height: 180px;
+  margin-top: 25px;
+
+  position: relative;
+
+  border-bottom: 1px solid #e7eaf0;
+}
+
+.chart-line {
+  position: absolute;
+
+  left: 5%;
+  right: 5%;
+  top: 50%;
+
+  height: 2px;
+
+  background: #5877d9;
+
+  transform: rotate(-4deg);
+}
+
+.chart-placeholder span {
+  position: absolute;
+  bottom: -25px;
+  left: 0;
+
+  color: #8992a3;
+  font-size: 10px;
+}
+
+
+/* LOADING / ERROR */
+
+.state-container {
+  min-height: calc(100vh - 76px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  color: #697386;
+}
+
+.loader {
+  width: 30px;
+  height: 30px;
+
+  border: 3px solid #e5e8ed;
+  border-top-color: #172033;
+
+  border-radius: 50%;
+
+  animation: spin 0.8s linear infinite;
+
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.state-container button {
+  margin-top: 15px;
+  padding: 10px 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #172033;
+  color: white;
+
+  cursor: pointer;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+
+  .topbar {
+    padding: 0 20px;
+  }
+
+  .main-content {
+    padding: 25px 20px 40px;
+  }
+
+  .sensor-grid,
+  .intelligence-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analysis-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .insight-card {
+    align-items: flex-start;
+    gap: 20px;
+    flex-direction: column;
+  }
+
+  .priority-block {
+    text-align: left;
+  }
+}
