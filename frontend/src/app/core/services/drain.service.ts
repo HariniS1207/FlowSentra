@@ -1,91 +1,153 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, forkJoin, map } from 'rxjs';
 
 import { DrainDashboard } from '../../models/drain-dashboard.model';
 
+
 interface LatestReadingResponse {
+
   success: boolean;
+
   drain_id: string;
+
   latest_reading: {
+
     drain_id: string;
+
     water_level_cm: number;
+
     flow_rate_lpm: number;
+
     rainfall: number;
+
     timestamp: string;
+
+    created_at?: string;
+
   };
+
 }
+
+
+interface AnalysisResponse {
+
+  success: boolean;
+
+  drain_id: string;
+
+  analysis: any;
+
+}
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class DrainService {
 
-  private readonly http = inject(HttpClient);
+  private readonly http =
+    inject(HttpClient);
 
-  private readonly apiUrl = 'http://localhost:8000/api/v1';
 
-  getDashboardData(drainId: string): Observable<DrainDashboard> {
+  private readonly apiUrl =
+    'http://localhost:8000/api/v1';
 
-    return this.http
-      .get<LatestReadingResponse>(
-        `${this.apiUrl}/drains/${drainId}/latest`
-      )
-      .pipe(
-        map(response => {
 
-          console.log('FlowSentra API response:', response);
+  // ==========================================================
+  // DASHBOARD
+  // ==========================================================
 
-          return {
-            drain_id: response.drain_id,
+  getDashboardData(
+    drainId: string
+  ): Observable<DrainDashboard> {
 
-            latest_reading: response.latest_reading,
+    return forkJoin({
 
-            /*
-             * AI analysis will be connected later.
-             * For now, keep the dashboard structure valid
-             * without pretending these are real AI results.
-             */
-            analysis: {
-              drain_id: response.drain_id,
-              health_score: 0,
-              condition: 'NORMAL',
-              probable_cause: 'NORMAL_DRAINAGE',
-              severity: 'LOW',
-              overflow_risk: 0,
-              sensor_confidence: 0,
-              maintenance_priority: 'P3',
-              recommended_action:
-                'Awaiting intelligence analysis.'
-            }
-          };
+      latest:
+        this.http.get<LatestReadingResponse>(
+          `${this.apiUrl}/drains/${drainId}/latest`
+        ),
 
-        })
-      );
+      analysis:
+        this.http.get<AnalysisResponse>(
+          `${this.apiUrl}/drains/${drainId}/analysis`
+        )
+
+    }).pipe(
+
+      map(({ latest, analysis }) => {
+
+        console.log(
+          'LATEST API:',
+          latest
+        );
+
+        console.log(
+          'ANALYSIS API:',
+          analysis
+        );
+
+
+        return {
+
+          drain_id:
+            latest.drain_id,
+
+          latest_reading:
+            latest.latest_reading,
+
+          analysis:
+            analysis.analysis
+
+        } as DrainDashboard;
+
+      })
+
+    );
+
   }
 
 
-  getLatestReading(drainId: string): Observable<unknown> {
+  // ==========================================================
+  // LATEST
+  // ==========================================================
 
-    return this.http.get(
+  getLatestReading(
+    drainId: string
+  ): Observable<LatestReadingResponse> {
+
+    return this.http.get<LatestReadingResponse>(
       `${this.apiUrl}/drains/${drainId}/latest`
     );
 
   }
 
 
-  getAnalysis(drainId: string): Observable<unknown> {
+  // ==========================================================
+  // ANALYSIS
+  // ==========================================================
 
-    return this.http.get(
+  getAnalysis(
+    drainId: string
+  ): Observable<AnalysisResponse> {
+
+    return this.http.get<AnalysisResponse>(
       `${this.apiUrl}/drains/${drainId}/analysis`
     );
 
   }
 
 
-  getHistory(drainId: string): Observable<unknown> {
+  // ==========================================================
+  // HISTORY
+  // ==========================================================
 
-    return this.http.get(
+  getHistory(
+    drainId: string
+  ): Observable<any> {
+
+    return this.http.get<any>(
       `${this.apiUrl}/drains/${drainId}/history`
     );
 

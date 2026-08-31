@@ -489,3 +489,93 @@
     text-align: left;
   }
 }
+
+/* ============================================================
+   REAL SENSOR TREND
+   ============================================================ */
+
+.real-chart {
+  display: flex;
+  height: 260px;
+  margin-top: 30px;
+}
+
+.chart-axis {
+  width: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 13px;
+  color: #718096;
+}
+
+.chart-area {
+  position: relative;
+  flex: 1;
+  height: 230px;
+  border-bottom: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+.chart-grid-lines {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.chart-grid-lines span {
+  width: 100%;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.chart-bars {
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  bottom: 0;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 10px;
+}
+
+.chart-point {
+  position: relative;
+  width: 10px;
+  min-height: 15px;
+  max-height: 90%;
+  background: #5675dc;
+  border-radius: 6px 6px 0 0;
+  transition: height 0.4s ease;
+}
+
+.point-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #5675dc;
+  top: -5px;
+  left: 0;
+}
+
+.trend-legend {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #718096;
+}
+
+.no-history {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #718096;
+}
