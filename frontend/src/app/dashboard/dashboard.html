@@ -4,6 +4,7 @@
   <header class="topbar">
 
     <div class="brand">
+
       <div class="brand-mark">
         FS
       </div>
@@ -12,6 +13,7 @@
         <h1>FlowSentra</h1>
         <p>Intelligent Drainage Monitoring</p>
       </div>
+
     </div>
 
     <div class="system-status">
@@ -22,36 +24,58 @@
   </header>
 
 
+  <!-- LOADING STATE -->
   @if (loading) {
 
     <main class="state-container">
+
       <div class="loader"></div>
-      <p>Loading drain intelligence...</p>
+
+      <p>
+        Loading drain intelligence...
+      </p>
+
     </main>
 
   }
 
+
+  <!-- ERROR STATE -->
   @else if (error) {
 
     <main class="state-container error-state">
-      <h2>Unable to retrieve drain data</h2>
-      <p>Please try again.</p>
+
+      <h2>
+        Unable to retrieve drain data
+      </h2>
+
+      <p>
+        Please try again.
+      </p>
 
       <button (click)="loadDashboard()">
         Try Again
       </button>
+
     </main>
 
   }
 
+
+  <!-- DASHBOARD -->
   @else if (dashboardData) {
 
     <main class="main-content">
 
+
+      <!-- ========================================================= -->
       <!-- DRAIN OVERVIEW -->
+      <!-- ========================================================= -->
+
       <section class="overview-section">
 
         <div>
+
           <span class="section-label">
             MONITORED DRAIN
           </span>
@@ -61,9 +85,13 @@
           </h2>
 
           <p class="timestamp">
+
             Last updated:
-            {{ dashboardData.latest_reading.timestamp | date:'medium' }}
+
+            {{ dashboardData.latest_reading.created_at | date:'medium' }}
+
           </p>
+
         </div>
 
 
@@ -71,15 +99,21 @@
           class="condition-badge"
           [class]="conditionClass"
         >
+
           <span class="status-dot"></span>
 
           {{ dashboardData.analysis.condition }}
+
         </div>
 
       </section>
 
 
+
+      <!-- ========================================================= -->
       <!-- MAIN INSIGHT -->
+      <!-- ========================================================= -->
+
       <section class="insight-card">
 
         <div class="insight-content">
@@ -89,13 +123,16 @@
           </span>
 
           <h3>
+
             {{ dashboardData.analysis.probable_cause
               .replace('_', ' ') }}
+
           </h3>
 
           <p>
-            Water level and flow conditions indicate
-            a possible restricted drainage path.
+
+            {{ conditionDescription }}
+
           </p>
 
         </div>
@@ -103,10 +140,14 @@
 
         <div class="priority-block">
 
-          <span>MAINTENANCE PRIORITY</span>
+          <span>
+            MAINTENANCE PRIORITY
+          </span>
 
           <strong>
+
             {{ dashboardData.analysis.maintenance_priority }}
+
           </strong>
 
         </div>
@@ -114,9 +155,15 @@
       </section>
 
 
+
+      <!-- ========================================================= -->
       <!-- SENSOR CARDS -->
+      <!-- ========================================================= -->
+
       <section class="sensor-grid">
 
+
+        <!-- WATER LEVEL -->
         <article class="sensor-card">
 
           <span class="sensor-label">
@@ -124,7 +171,9 @@
           </span>
 
           <strong>
+
             {{ dashboardData.latest_reading.water_level_cm }}
+
           </strong>
 
           <span class="unit">
@@ -134,6 +183,8 @@
         </article>
 
 
+
+        <!-- FLOW RATE -->
         <article class="sensor-card">
 
           <span class="sensor-label">
@@ -141,7 +192,9 @@
           </span>
 
           <strong>
+
             {{ dashboardData.latest_reading.flow_rate_lpm }}
+
           </strong>
 
           <span class="unit">
@@ -151,151 +204,249 @@
         </article>
 
 
-        <article class="sensor-card">
+
+        <!-- RAIN SENSOR -->
+        <article class="sensor-card rain-card">
 
           <span class="sensor-label">
-            Rainfall
+            Rain Sensor
           </span>
 
-          <strong>
-            {{ dashboardData.latest_reading.rainfall }}
-          </strong>
 
-          <span class="unit">
-            mm
+          <div class="rain-value">
+
+            <strong>
+
+              {{ dashboardData.latest_reading.rainfall }}
+
+            </strong>
+
+            <span class="unit">
+              raw
+            </span>
+
+          </div>
+
+
+          <span
+            class="rain-status"
+            [class]="rainStatusClass"
+          >
+
+            <span class="status-dot"></span>
+
+            {{ rainStatus }}
+
           </span>
 
         </article>
 
+
       </section>
 
 
+
+      <!-- ========================================================= -->
       <!-- INTELLIGENCE GRID -->
+      <!-- ========================================================= -->
+
       <section class="intelligence-grid">
 
-        <!-- HEALTH -->
+
+        <!-- DRAIN HEALTH -->
         <article class="metric-card health-card">
 
           <div class="metric-header">
-            <span>Drain Health</span>
-            <span>0–100</span>
+
+            <span>
+              Drain Health
+            </span>
+
+            <span>
+              0–100
+            </span>
+
           </div>
+
 
           <div class="health-score">
 
             <strong>
+
               {{ dashboardData.analysis.health_score }}
+
             </strong>
 
-            <span>/100</span>
+            <span>
+              /100
+            </span>
 
           </div>
+
 
           <div class="progress-track">
+
             <div
               class="progress-fill health"
-              [style.width.%]="dashboardData.analysis.health_score"
+              [style.width.%]="
+                dashboardData.analysis.health_score
+              "
             ></div>
+
           </div>
 
         </article>
 
 
-        <!-- OVERFLOW -->
+
+        <!-- OVERFLOW RISK -->
         <article class="metric-card">
 
           <div class="metric-header">
-            <span>Overflow Risk</span>
+
+            <span>
+              Overflow Risk
+            </span>
 
             <strong>
+
               {{ dashboardData.analysis.overflow_risk }}%
+
             </strong>
+
           </div>
 
+
           <div class="progress-track large">
+
             <div
               class="progress-fill risk"
-              [style.width.%]="dashboardData.analysis.overflow_risk"
+              [style.width.%]="
+                dashboardData.analysis.overflow_risk
+              "
             ></div>
+
           </div>
 
+
           <p class="metric-description">
+
             Current estimated overflow probability
+
           </p>
 
         </article>
 
 
-        <!-- CONFIDENCE -->
+
+        <!-- SENSOR CONFIDENCE -->
         <article class="metric-card">
 
           <div class="metric-header">
-            <span>Sensor Confidence</span>
+
+            <span>
+              Sensor Confidence
+            </span>
 
             <strong>
+
               {{ dashboardData.analysis.sensor_confidence }}%
+
             </strong>
+
           </div>
+
 
           <div class="progress-track large">
+
             <div
               class="progress-fill confidence"
-              [style.width.%]="dashboardData.analysis.sensor_confidence"
+              [style.width.%]="
+                dashboardData.analysis.sensor_confidence
+              "
             ></div>
+
           </div>
 
+
           <p class="metric-description">
+
             Reliability of current assessment
+
           </p>
 
         </article>
+
 
       </section>
 
 
+
+      <!-- ========================================================= -->
       <!-- ANALYSIS -->
+      <!-- ========================================================= -->
+
       <section class="analysis-grid">
 
+
+        <!-- SEVERITY -->
         <article class="analysis-card">
 
           <span class="section-label">
             SEVERITY
           </span>
 
+
           <h3
             [class]="severityClass"
           >
+
             {{ dashboardData.analysis.severity }}
+
           </h3>
 
         </article>
 
 
+
+        <!-- RECOMMENDED ACTION -->
         <article class="analysis-card">
 
           <span class="section-label">
             RECOMMENDED ACTION
           </span>
 
+
           <h3>
             Inspect Drain
           </h3>
 
+
           <p>
+
             {{ dashboardData.analysis.recommended_action }}
+
           </p>
 
         </article>
 
+
       </section>
 
 
-      <!-- TREND PLACEHOLDER FOR ACTUAL CHART -->
+
+      <!-- ========================================================= -->
+      <!-- SENSOR TRENDS -->
+      <!-- ========================================================= -->
+
       <section class="trend-card">
 
+
+        <!-- TREND HEADER -->
         <div class="trend-header">
 
           <div>
+
             <span class="section-label">
               SENSOR TRENDS
             </span>
@@ -303,7 +454,9 @@
             <h3>
               Drain Conditions Over Time
             </h3>
+
           </div>
+
 
           <span class="trend-info">
             Live monitoring
@@ -311,15 +464,201 @@
 
         </div>
 
-        <div class="chart-placeholder">
 
-          <div class="chart-line"></div>
 
-          <span>Water Level</span>
+        <!-- CHART -->
+        @if (historyReadings.length > 0) {
 
-        </div>
+          <div class="chart-container">
+
+
+            <svg
+              class="water-chart"
+              viewBox="0 0 1000 260"
+              preserveAspectRatio="none"
+            >
+
+
+              <!-- ================================================= -->
+              <!-- HORIZONTAL GUIDE LINES -->
+              <!-- ================================================= -->
+
+              <line
+                x1="25"
+                y1="25"
+                x2="975"
+                y2="25"
+                class="chart-grid-line"
+              />
+
+
+              <line
+                x1="25"
+                y1="90"
+                x2="975"
+                y2="90"
+                class="chart-grid-line"
+              />
+
+
+              <line
+                x1="25"
+                y1="155"
+                x2="975"
+                y2="155"
+                class="chart-grid-line"
+              />
+
+
+              <line
+                x1="25"
+                y1="235"
+                x2="975"
+                y2="235"
+                class="chart-grid-line"
+              />
+
+
+
+              <!-- ================================================= -->
+              <!-- SENSOR DATA LINE -->
+              <!-- ================================================= -->
+
+              <polyline
+                [attr.points]="chartPoints"
+                class="chart-data-line"
+                fill="none"
+              />
+
+
+
+              <!-- ================================================= -->
+              <!-- DATA POINTS -->
+              <!-- ================================================= -->
+
+              @for (
+                reading of historyReadings;
+                track reading.timestamp
+              ) {
+
+                <circle
+                  class="chart-data-point"
+
+                  [attr.cx]="
+                    historyReadings.length === 1
+                      ? 500
+                      : 25 +
+                        (
+                          $index /
+                          (historyReadings.length - 1)
+                        ) * 950
+                  "
+
+                  [attr.cy]="
+                    235 -
+                    (
+                      (
+                        reading.water_level_cm -
+                        minWaterLevel
+                      ) /
+                      (
+                        (maxWaterLevel - minWaterLevel) === 0
+                          ? 1
+                          : (
+                              maxWaterLevel -
+                              minWaterLevel
+                            )
+                      )
+                    ) * 210
+                  "
+
+                  r="4"
+                />
+
+              }
+
+
+            </svg>
+
+
+
+            <!-- ================================================= -->
+            <!-- CHART AXIS -->
+            <!-- ================================================= -->
+
+            <div class="chart-axis">
+
+              <span>
+
+                {{ minWaterLevel | number:'1.1-1' }}
+                cm
+
+              </span>
+
+
+              <span>
+                Water Level
+              </span>
+
+
+              <span>
+
+                {{ maxWaterLevel | number:'1.1-1' }}
+                cm
+
+              </span>
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- CHART FOOTER -->
+            <!-- ================================================= -->
+
+            <div class="chart-footer">
+
+              <span>
+
+                {{ historyReadings.length }}
+                readings
+
+              </span>
+
+
+              <span>
+
+                Latest:
+
+                {{ chartLatestValue | number:'1.1-1' }}
+                cm
+
+              </span>
+
+            </div>
+
+
+          </div>
+
+        }
+
+
+        <!-- EMPTY CHART STATE -->
+        @else {
+
+          <div class="chart-empty">
+
+            <p>
+              Waiting for sensor history...
+            </p>
+
+          </div>
+
+        }
+
 
       </section>
+
 
     </main>
 

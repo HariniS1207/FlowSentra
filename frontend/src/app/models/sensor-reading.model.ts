@@ -4,4 +4,5 @@ export interface SensorReading {
   flow_rate_lpm: number;
   rainfall: number;
   timestamp: string;
+  created_at: string;
 }

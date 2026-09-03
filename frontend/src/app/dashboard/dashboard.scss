@@ -489,3 +489,139 @@
     text-align: left;
   }
 }
+
+/* =========================================================
+   LIVE SENSOR TREND CHART
+   ========================================================= */
+
+.chart-container {
+  width: 100%;
+  margin-top: 24px;
+}
+
+.water-chart {
+  width: 100%;
+  height: 260px;
+  display: block;
+  overflow: visible;
+}
+
+.chart-grid-line {
+  stroke: #e5e7eb;
+  stroke-width: 1;
+}
+
+.chart-data-line {
+  stroke: #4f6fde;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.chart-data-point {
+  fill: #4f6fde;
+  stroke: white;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.chart-axis {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-top: 8px;
+
+  font-size: 12px;
+  color: #718096;
+}
+
+.chart-axis span:nth-child(2) {
+  font-weight: 500;
+}
+
+.chart-footer {
+  display: flex;
+  justify-content: space-between;
+
+  margin-top: 14px;
+
+  font-size: 12px;
+  color: #718096;
+}
+
+.chart-empty {
+  height: 260px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #718096;
+  font-size: 14px;
+}
+
+.rain-card {
+  .rain-value {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .rain-value strong {
+    font-size: 38px;
+  }
+
+  .rain-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .rain-status .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .rain-status.no-rain {
+    color: #15945f;
+  }
+
+  .rain-status.no-rain .status-dot {
+    background: #15945f;
+  }
+
+  .rain-status.light-rain {
+    color: #4f73d9;
+  }
+
+  .rain-status.light-rain .status-dot {
+    background: #4f73d9;
+  }
+
+  .rain-status.moderate-rain {
+    color: #d28a00;
+  }
+
+  .rain-status.moderate-rain .status-dot {
+    background: #d28a00;
+  }
+
+  .rain-status.heavy-rain {
+    color: #d33b3b;
+  }
+
+  .rain-status.heavy-rain .status-dot {
+    background: #d33b3b;
+  }
+
+  .rain-status.unknown {
+    color: #777;
+  }
+}

@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, status
@@ -18,20 +17,66 @@ router = APIRouter(
 )
 
 
-def _convert_to_ai_reading(reading: dict[str, Any]) -> AISensorReading:
+def _normalize_rainfall(raw_rainfall: float) -> float:
     """
-    Convert a Firestore/backend sensor reading into the AI module's
-    SensorReading model.
+    Convert the raw rain-sensor ADC value from the hardware
+    into the rainfall scale expected by the AI module.
 
-    The field names remain unchanged.
+    Current hardware behavior:
+        ~1000 = NO RAIN
+        ~300-400 = RAIN DETECTED
+
+    AI rainfall scale:
+        0.0 = no rain
+        1.0 = low rain
+        5.0 = moderate rain
+        8.0 = heavy rain
+
+    This is a prototype normalization and is NOT rainfall
+    measured in millimetres.
     """
+
+    # Dry / no rain
+    if raw_rainfall >= 800:
+        return 0.0
+
+    # Light rain
+    if raw_rainfall >= 600:
+        return 1.0
+
+    # Moderate rain
+    if raw_rainfall >= 400:
+        return 5.0
+
+    # Heavy rain
+    return 8.0
+
+
+def _convert_to_ai_reading(
+    reading: dict[str, Any],
+) -> AISensorReading:
+    """
+    Convert a Firestore/backend sensor reading into the AI
+    module's SensorReading model.
+
+    Hardware-specific rainfall normalization is performed here.
+
+    For AI trend analysis, prefer Firestore's created_at timestamp
+    because it represents the actual time the backend received the
+    reading. This avoids problems when multiple Arduino readings
+    have identical sensor timestamps.
+    """
+
+    ai_timestamp = reading.get("created_at") or reading["timestamp"]
 
     return AISensorReading(
         drain_id=reading["drain_id"],
         water_level_cm=float(reading["water_level_cm"]),
         flow_rate_lpm=float(reading["flow_rate_lpm"]),
-        rainfall=float(reading["rainfall"]),
-        timestamp=reading["timestamp"],
+        rainfall=_normalize_rainfall(
+            float(reading["rainfall"])
+        ),
+        timestamp=ai_timestamp,
     )
 
 
@@ -90,8 +135,8 @@ def get_history(drain_id: str):
 @router.get("/{drain_id}/analysis")
 def get_drain_analysis(drain_id: str):
     """
-    Generate current drainage intelligence using the latest reading
-    and recent sensor history.
+    Generate current drainage intelligence using the latest
+    reading and recent sensor history.
     """
 
     # ---------------------------------------------------------------
@@ -124,7 +169,7 @@ def get_drain_analysis(drain_id: str):
     )
 
     # ---------------------------------------------------------------
-    # 3. Convert backend data → AI models
+    # 3. Convert backend data -> AI models
     # ---------------------------------------------------------------
 
     try:
@@ -142,7 +187,9 @@ def get_drain_analysis(drain_id: str):
                 "success": False,
                 "error": {
                     "code": "AI_INPUT_CONVERSION_ERROR",
-                    "message": "Failed to prepare sensor data for analysis",
+                    "message": (
+                        "Failed to prepare sensor data for analysis"
+                    ),
                 },
             },
         ) from exc
@@ -164,7 +211,9 @@ def get_drain_analysis(drain_id: str):
                 "success": False,
                 "error": {
                     "code": "DRAIN_ANALYSIS_ERROR",
-                    "message": "Failed to analyse drain condition",
+                    "message": (
+                        "Failed to analyse drain condition"
+                    ),
                 },
             },
         ) from exc
